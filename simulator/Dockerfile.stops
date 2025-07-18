@@ -1,0 +1,41 @@
+# Dockerfile for Truck Stops Simulator
+FROM python:3.11-slim
+
+# Set working directory
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements file
+COPY requirements.txt .
+
+# Install Python dependencies
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+# Copy application code
+COPY simulate_truck_stops.py .
+
+# Create logs directory
+RUN mkdir -p logs
+
+# Create non-root user for security
+RUN useradd --create-home --shell /bin/bash --uid 1000 stops_simulator
+RUN chown -R stops_simulator:stops_simulator /app
+USER stops_simulator
+
+# Set environment variables with defaults
+ENV PYTHONUNBUFFERED=1
+ENV LOG_LEVEL=INFO
+ENV KAFKA_BROKERS=kafka:9092
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD python -c "import socket; socket.create_connection(('kafka', 9092), timeout=5)"
+
+# Run the truck stops simulator
+CMD ["python", "simulate_truck_stops.py"]

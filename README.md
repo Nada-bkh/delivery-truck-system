@@ -67,8 +67,8 @@ This distributed system combines real-time truck simulation, environmental optim
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
-   cd fleet-management-system
+   git clone (https://github.com/Nada-bkh/delivery-truck-system.git)
+   cd delivery-truck-system
    ```
 
 2. **Prepare OSRM data**
@@ -94,7 +94,6 @@ This distributed system combines real-time truck simulation, environmental optim
 fleet-management-system/
 ├── docker-compose.yml          # Service orchestration
 ├── backend/                    # Backend API service
-├── frontend/                   # React frontend (not integrated)
 ├── simulator/                  # Python simulation services
 │   ├── Dockerfile.optimizer    # Carbon optimizer container
 │   ├── Dockerfile.simulator    # Truck movement simulator
